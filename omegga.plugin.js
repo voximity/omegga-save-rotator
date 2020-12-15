@@ -25,8 +25,8 @@ class SaveRotator {
         }
 
         // Wait after clearing if the field is greater than zero
-        if (this.omegga.config["wait-after-clearing"] > 0)
-            await new Promise(resolve => setTimeout(resolve, this.omegga.config["wait-after-clearing"] * 1000));
+        if (this.config["wait-after-clearing"] > 0)
+            await new Promise(resolve => setTimeout(resolve, this.config["wait-after-clearing"] * 1000));
 
         this.omegga.loadBricks(this.saves[this.mapIndex]);
     }
