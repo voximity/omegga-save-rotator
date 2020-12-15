@@ -1,0 +1,35 @@
+{
+    "name": "Save Rotator",
+    "description": "Set a few saves to be rotated in and out on an interval or by a voted command.",
+    "author": "x",
+    "config": {
+        "saves": {
+            "default": "",
+            "description": "Comma-separated list of saves to read from `data/Saved/Builds` that will be used in rotation. If empty, uses all available saves.",
+            "type": "string"
+        },
+        "rotate-on-interval": {
+            "default": "300",
+            "description": "Rotate the map every X seconds. If set to zero, interval-based rotation will not occur.",
+            "type": "number"
+        },
+        "enable-vote-rocking": {
+            "default": false,
+            "description": "Enable !rtv to rotate the map. If this is enabled in tandem with interval rotation, then a successful !rtv will reset the timer.",
+            "type": "boolean"
+        },
+        "percentage-rtv-to-rotate": {
+            "default": 0.5,
+            "description": "A number, from 0 to 1, representing the percentage of people in the server required to !rtv to rotate the map.",
+            "type": "number"
+        }
+    },
+    "commands": [
+        {
+            "name": "!rtv",
+            "description": "Rock the vote. Vote to switch the map.",
+            "example": "!rtv",
+            "args": []
+        }
+    ]
+}
