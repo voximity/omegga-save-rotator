@@ -36,7 +36,7 @@ class SaveRotator {
     }
 
     votesRequired() {
-        return Math.floor(this.omegga.getPlayers().length * this.config["percentage-rtv-to-rotate"]);
+        return Math.ceil(this.omegga.getPlayers().length * this.config["percentage-rtv-to-rotate"]);
     }
 
     async init() {
