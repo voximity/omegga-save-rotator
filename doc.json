@@ -9,8 +9,13 @@
             "type": "string"
         },
         "rotate-on-interval": {
-            "default": "300",
+            "default": 300,
             "description": "Rotate the map every X seconds. If set to zero, interval-based rotation will not occur.",
+            "type": "number"
+        },
+        "wait-after-clearing": {
+            "default": 0,
+            "description": "Wait X seconds after clearing before loading. For smooth minigame integration, set this to 5-10 seconds, add water, and enable water damage to ensure everyone respawns in time for the next map.",
             "type": "number"
         },
         "enable-vote-rocking": {
