@@ -20,12 +20,32 @@
         },
         "enable-vote-rocking": {
             "default": false,
-            "description": "Enable !rtv to rotate the map. If this is enabled in tandem with interval rotation, then a successful !rtv will reset the timer.",
+            "description": "Enable !rtv to initiate the rotation process.",
             "type": "boolean"
         },
         "percentage-rtv-to-rotate": {
             "default": 0.5,
-            "description": "A number, from 0 to 1, representing the percentage of people in the server required to !rtv to rotate the map.",
+            "description": "A number, from 0 to 1, representing the percentage of people in the server required to !rtv to initiate the rotation process.",
+            "type": "number"
+        },
+        "enable-map-voting": {
+            "default": false,
+            "description": "If enabled, players will be able to vote between N different maps when the rotation process begins, where N is `map-candidate-count`.",
+            "type": "boolean"
+        },
+        "enable-map-nominations": {
+            "default": false,
+            "description": "If it and `enable-map-voting` are enabled, players will be able to nominate saves to be included in the rotation voting selection.",
+            "type": "boolean"
+        },
+        "map-candidate-count": {
+            "default": 5,
+            "description": "The number of maps that can appear in the map voting process.",
+            "type": "number"
+        },
+        "voting-time": {
+            "default": 30,
+            "description": "Number of seconds that voting should run, provided `enable-map-voting` is true.",
             "type": "number"
         }
     },
@@ -34,6 +54,36 @@
             "name": "!rtv",
             "description": "Rock the vote. Vote to switch the map.",
             "example": "!rtv",
+            "args": []
+        },
+        {
+            "name": "!nominate",
+            "description": "Nominate a map to be included in the selection process.",
+            "example": "!nominate Very Cool Map",
+            "args": [
+                {
+                    "name": "map",
+                    "description": "The name of the map to nominate. Must be its save name, minus the `.brs`.",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "!vote",
+            "description": "Vote for a map during the selection process.",
+            "example": "!vote 3",
+            "args": [
+                {
+                    "name": "index",
+                    "description": "A number representing the one shown next to the maps listed in the selection process.",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "!maps",
+            "description": "Shows a list of valid maps for the user to nominate.",
+            "example": "!maps",
             "args": []
         }
     ]
