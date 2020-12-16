@@ -47,6 +47,11 @@
             "default": 30,
             "description": "Number of seconds that voting should run, provided `enable-map-voting` is true.",
             "type": "number"
+        },
+        "color": {
+            "default": "8fd66b",
+            "description": "Hex code of the color most prompts will display in.",
+            "type": "string"
         }
     },
     "commands": [

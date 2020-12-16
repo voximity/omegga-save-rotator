@@ -19,7 +19,7 @@ class SaveRotator {
             const allCandidates = Object.values(this.nominations).concat(this.saves);
             this.votingCandidates = allCandidates.filter((s, i) => allCandidates.indexOf(s) == i).slice(0, this.config["map-candidate-count"]);
 
-            this.omegga.broadcast(`Voting will occur in ${this.config["voting-time"]} seconds! <b>Vote now using \`!vote #\`!`);
+            this.omegga.broadcast(`<color="#${this.config.color}">Voting will conclude in ${this.config["voting-time"]} seconds! <b>Vote now using <code>!vote #</code>!</b></color>`);
             for (const i in this.votingCandidates)
                 this.omegga.broadcast(`${i * 1 /* this is precisely why javascript is cancerous */ + 1}) <b>${this.votingCandidates[i]}</b>`);
 
@@ -28,7 +28,7 @@ class SaveRotator {
             this.voting = false;
 
             const winner = this.votingCandidates.map((c, i) => [c, Object.values(this.votes).filter(v => v - 1 == i).length]).sort((a, b) => b[1] - a[1])[0][0];
-            this.omegga.broadcast(`<b>${winner}</b> has been selected!`);
+            this.omegga.broadcast(`<color="#${this.config.color}"><b>${winner}</b> has been selected!</color>`);
 
             return winner;
         } else {
@@ -107,6 +107,7 @@ class SaveRotator {
 
         this.omegga.on("chatcmd:rtv", async (name) => {
             if (!this.config["enable-vote-rocking"]) return; // Halt the command if `enable-vote-rocking` is false
+            if (this.voting) return; // Halt the command if we're already voting
 
             // Add or remove voters from the voters array
             const existingIndex = this.voters.indexOf(name);
@@ -114,10 +115,10 @@ class SaveRotator {
                 // The user has not voted, add them
                 this.voters.push(name);
                 if (this.checkVoters()) {
-                    this.omegga.broadcast(`<b>${name}</b> has voted to switch the map! Rotating the map...`);
+                    this.omegga.broadcast(`<color="#${this.config.color}">${name}</color> has voted to switch the map! Rotating the map...`);
                     await this.rotateMap();
                 } else {
-                    this.omegga.broadcast(`<b>${name}</b> has voted to switch the map! <b>${this.votesRequired() - this.voters.length} more votes</b> required to switch.`);
+                    this.omegga.broadcast(`<color="#${this.config.color}">${name}</color> has voted to switch the map! <color="#${this.config.color}"><b>${this.votesRequired() - this.voters.length} more votes</b> required to switch.</color>`);
                 }
             } else {
                 // The user has voted, remove them
@@ -132,9 +133,9 @@ class SaveRotator {
 
             if (this.saves.includes(mapName)) {
                 this.nominations[name] = mapName;
-                this.omegga.broadcast(`<b>${name}</b> has nominated the map <b>${mapName}</b>!`);
+                this.omegga.broadcast(`<color="#${this.config.color}">${name}</color> has nominated the map <color="#${this.config.color}"><b>${mapName}</b></color>!`);
             } else {
-                this.omegga.broadcast(`<b>${mapName}</b> is not a valid map! Map names are case-sensitive. View all with \`!maps\`.`);
+                this.omegga.broadcast(`<color="#${this.config.color}"><b>${mapName}</b></color> is not a valid map! Map names are case-sensitive. View all with <code>!maps</code>.`);
             }
         });
 
@@ -143,14 +144,15 @@ class SaveRotator {
 
             if (candidateIndex >= 1 && candidateIndex <= this.votingCandidates.length) {
                 this.votes[name] = candidateIndex;
-                this.omegga.broadcast(`<b>${name}</b> has voted for <b>${this.votingCandidates[candidateIndex - 1]}</b>!`);
+                this.omegga.broadcast(`<color="#${this.config.color}">${name}</color> has voted for <color="${this.config.color}"><b>${this.votingCandidates[candidateIndex - 1]}</b></color>!`);
             } else {
-                this.omegga.broadcast("Invalid map index!");
+                this.omegga.broadcast(`<color="#${this.config.color}"><b>Invalid map index!</b></color> There are <color="#${this.config.color}">${this.votingCandidates.length} maps</color> to choose from.`);
             }
         });
 
         this.omegga.on("chatcmd:maps", async (name) => {
-            this.omegga.broadcast(this.saves.join(", "));
+            this.omegga.broadcast(`<color="#${this.config.color}">There are <b>${this.saves.length} maps</b> in rotation.</color>`);
+            this.omegga.broadcast(this.saves.map(s => `<b>${s}</b>`).join(", "));
         });
     }
 
