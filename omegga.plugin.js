@@ -1,6 +1,6 @@
-const fs = require("fs");
+import { promises } from "fs";
 
-class SaveRotator {
+export default class SaveRotatorPlugin {
     constructor(omegga, config, store) {
         this.omegga = omegga;
         this.config = config;
@@ -17,7 +17,9 @@ class SaveRotator {
             this.shuffleSaves();
 
             const allCandidates = Object.values(this.nominations).concat(this.saves);
-            this.votingCandidates = allCandidates.filter((s, i) => allCandidates.indexOf(s) == i).slice(0, this.config["map-candidate-count"]);
+            this.votingCandidates = allCandidates
+                .filter((s, i) => allCandidates.indexOf(s) == i)
+                .slice(0, this.config["map-candidate-count"]);
 
             this.omegga.broadcast(`<color="#${this.config.color}">Voting will conclude in ${this.config["voting-time"]} seconds! <b>Vote now using <code>!vote #</code>!</b></color>`);
             for (const i in this.votingCandidates)
@@ -27,7 +29,12 @@ class SaveRotator {
             await new Promise(resolve => setTimeout(resolve, this.config["voting-time"] * 1000));
             this.voting = false;
 
-            const winner = this.votingCandidates.map((c, i) => [c, Object.values(this.votes).filter(v => v - 1 == i).length]).sort((a, b) => b[1] - a[1])[0][0];
+            const winner = this.votingCandidates.map(
+                (c, i) => [c, Object.values(this.votes)
+                    .filter(v => v - 1 == i).length
+                ])
+                .sort((a, b) => b[1] - a[1])[0][0];
+
             this.omegga.broadcast(`<color="#${this.config.color}"><b>${winner}</b> has been selected!</color>`);
 
             return winner;
@@ -71,11 +78,13 @@ class SaveRotator {
     }
 
     async init() {
-        this.saves = this.config.saves.split(',').map(n => n.trim());
+        this.saves = typeof this.config.saves == "string" ? this.config.saves.split(",") : this.config.saves;
 
         // If the saves list is blank, grab saves from the Builds directory instead
         if (this.config.saves.trim() == "")
-            this.saves = (await fs.promises.readdir("data/Saved/Builds")).filter(s => s.endsWith(".brs")).map(s => s.substring(0, s.length - 4));
+            this.saves = (await promises.readdir("data/Saved/Builds"))
+                .filter(s => s.endsWith(".brs"))
+                .map(s => s.substring(0, s.length - 4));
 
         this.shuffleSaves();
 
@@ -122,7 +131,7 @@ class SaveRotator {
                 }
             } else {
                 // The user has voted, remove them
-                this.voters.splice(index, 1);
+                this.voters.splice(existingIndex, 1);
             }
         });
 
@@ -160,5 +169,3 @@ class SaveRotator {
         
     }
 }
-
-module.exports = SaveRotator;

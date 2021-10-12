@@ -4,9 +4,10 @@
     "author": "x",
     "config": {
         "saves": {
-            "default": "",
+            "default": [],
             "description": "Comma-separated list of saves to read from `data/Saved/Builds` that will be used in rotation. If empty, uses all available saves.",
-            "type": "string"
+            "type": "list",
+            "itemType": "string"
         },
         "rotate-on-interval": {
             "default": 300,
