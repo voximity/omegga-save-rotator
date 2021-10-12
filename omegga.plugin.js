@@ -1,4 +1,4 @@
-import { promises } from "fs";
+const {promises} = require("fs");
 
 export default class SaveRotatorPlugin {
     constructor(omegga, config, store) {
