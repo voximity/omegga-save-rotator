@@ -1,6 +1,6 @@
 const {promises} = require("fs");
 
-export default class SaveRotatorPlugin {
+module.exports = class SaveRotatorPlugin {
     constructor(omegga, config, store) {
         this.omegga = omegga;
         this.config = config;
